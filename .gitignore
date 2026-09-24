@@ -1,0 +1,14 @@
+# Configuración local de Claude Code (servidor de previsualización)
+.claude/
+
+# Archivos del sistema operativo
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+*~
+
+# Editores
+.vscode/
+.idea/

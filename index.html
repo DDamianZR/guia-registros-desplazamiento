@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Registros de Desplazamiento · Guía de estudio (DSD)</title>
+<meta name="description" content="Guía de estudio clara y visual sobre registros de desplazamiento: tipos, serie vs paralelo, cálculos de tiempo, contadores en anillo y Johnson, cuestionario resuelto y diagramas de tiempo. Con simulador interactivo.">
+<meta name="color-scheme" content="light dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="css/styles.css?v=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%234f46e5'/%3E%3Ctext x='16' y='23' font-size='20' text-anchor='middle' fill='white' font-family='monospace' font-weight='bold'%3E%E2%86%92%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+<!-- ============ BARRA SUPERIOR ============ -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">REG<span class="dot">→</span>DESP</div>
+    <nav class="topnav" aria-label="Secciones">
+      <a href="#empieza">Empieza aquí</a>
+      <a href="#que-es">Qué es</a>
+      <a href="#tipos">4 tipos</a>
+      <a href="#serie-paralelo">Serie vs Paralelo</a>
+      <a href="#simulador">Simulador</a>
+      <a href="#tiempo">Tiempos</a>
+      <a href="#contadores">Contadores</a>
+      <a href="#aplicaciones">Aplicaciones</a>
+      <a href="#cuestionario">Cuestionario</a>
+      <a href="#problemas">Diagramas</a>
+      <a href="#chuleta">Chuleta</a>
+    </nav>
+    <button class="theme-btn" id="themeBtn" title="Cambiar tema (claro/oscuro)" aria-label="Cambiar tema">◐</button>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="top">
+    <span class="eyebrow">📘 DSD · Primer examen · Cap. 9</span>
+    <h1>Registros de<br>desplazamiento</h1>
+    <p class="lede">Guía de estudio hecha para <strong>entender de verdad</strong> cómo funcionan — no para memorizar sin sentido. Con analogías, un simulador para jugar, y el cuestionario completo resuelto y explicado.</p>
+    <div class="meta">
+      <span class="chip">⏱️ Repaso completo en ~40 min</span>
+      <span class="chip">🎯 Meta: mínimo 8</span>
+      <span class="chip">🤝 Compártela con tu equipo</span>
+    </div>
+    <div class="callout tip" style="margin-top:22px">
+      <span class="ic">🧠</span>
+      <div class="body">
+        <strong>Cómo usar esta guía (pensada para no perder el foco)</strong>
+        <p class="mb0">No tienes que leer todo de corrido. Cada sección es independiente y arranca con un <span class="hl">resumen de 10 segundos</span>. Empieza por <a class="inlink" href="#empieza">"Empieza aquí"</a> (lo mínimo para el examen), juega con el <a class="inlink" href="#simulador">simulador</a> para que se te grabe, y deja el <a class="inlink" href="#cuestionario">cuestionario</a> y la <a class="inlink" href="#chuleta">chuleta</a> para el final.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 0 · EMPIEZA AQUÍ ============ -->
+  <section id="empieza">
+    <div class="sec-head"><span class="sec-num">★</span><h2>Empieza aquí: lo esencial</h2></div>
+    <p class="sec-sub">Si solo tuvieras 5 minutos, esto es lo que <strong>sí o sí</strong> va a caer. Todo lo demás en la guía explica el porqué de cada tarjeta.</p>
+
+    <div class="grid cols-2">
+      <div class="card">
+        <p class="mini-title">1 · La pieza básica</p>
+        <p class="mb0">Una <strong>etapa</strong> de un registro = <strong>un flip-flop</strong> = guarda <strong>1 bit</strong>. Un registro de <em>n</em> etapas guarda <em>n</em> bits.</p>
+      </div>
+      <div class="card">
+        <p class="mini-title">2 · Serie vs paralelo</p>
+        <p class="mb0"><strong>Serie:</strong> 1 bit por pulso → <strong>n pulsos</strong> para n bits. <strong>Paralelo:</strong> todos a la vez → <strong>1 pulso</strong>.</p>
+      </div>
+      <div class="card">
+        <p class="mini-title">3 · Fórmula de tiempo</p>
+        <p class="mb0">Meter n bits en serie tarda <code>n × T = n / f</code>. El <strong>retardo</strong> de un registro SISO de n bits también es <code>n × T</code>.</p>
+      </div>
+      <div class="card">
+        <p class="mini-title">4 · Contadores</p>
+        <p class="mb0"><strong>Anillo:</strong> módulo = n (necesita n flip-flops). <strong>Johnson:</strong> módulo = 2n (con n flip-flops).</p>
+      </div>
+      <div class="card">
+        <p class="mini-title">5 · Truco del SISO</p>
+        <p class="mb0">En un registro serie-serie, la <strong>salida es la entrada retrasada n pulsos</strong> (n = número de etapas). Si arranca en ceros, la salida es 0 hasta el pulso n+1.</p>
+      </div>
+      <div class="card">
+        <p class="mini-title">6 · Desplazar = mover</p>
+        <p class="mb0">En cada flanco activo del reloj <strong>todo se corre una posición</strong>: entra un bit por un lado y por el otro se pierde el que estaba.</p>
+      </div>
+    </div>
+
+    <div class="callout key">
+      <span class="ic">🔑</span>
+      <div class="body">
+        <strong>La idea que amarra todo</strong>
+        <p class="mb0">Un registro de desplazamiento hace <strong>dos cosas</strong>: <span class="hl">almacena</span> datos (como memoria, porque son flip-flops) y los <span class="hl">mueve</span> de una etapa a la siguiente con cada pulso de reloj. Todas las preguntas del examen salen de combinar esas dos ideas.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 1 · QUÉ ES ============ -->
+  <section id="que-es">
+    <div class="sec-head"><span class="sec-num">1</span><h2>¿Qué es un registro de desplazamiento?</h2></div>
+    <p class="sec-sub">Resumen de 10 s: es una <strong>fila de flip-flops</strong> conectados en cadena. Cada uno guarda 1 bit y le pasa su dato al de al lado cuando llega el reloj.</p>
+
+    <div class="callout good">
+      <span class="ic">🪣</span>
+      <div class="body">
+        <strong>La analogía de la brigada de cubetas</strong>
+        <p>Imagina una fila de personas pasando cubetas de agua para apagar un incendio. Cada persona <strong>sostiene exactamente una cubeta</strong> (= 1 bit) y solo puede pasarla cuando suena el silbato (= <strong>flanco de reloj</strong>).</p>
+        <p class="mb0">Al sonar el silbato, <strong>todos a la vez</strong> pasan su cubeta a la persona de la derecha. Entra una cubeta nueva por un extremo y la del otro extremo sale de la fila. Eso <em>es</em> un registro de desplazamiento: gente que guarda algo y lo va corriendo al ritmo del reloj.</p>
+      </div>
+    </div>
+
+    <h3>¿Por qué se consideran dispositivos <em>básicos de memoria</em>?</h3>
+    <p>Porque están hechos de <strong>flip-flops</strong>, y un flip-flop <strong>retiene</strong> el bit que tiene guardado mientras haya alimentación y no llegue un nuevo pulso. Guardar y conservar datos binarios es, literalmente, lo que hace una memoria.</p>
+    <div class="callout tip">
+      <span class="ic">💡</span>
+      <div class="body">
+        <strong>La diferencia con una RAM</strong>
+        <p class="mb0">En una RAM el dato se queda quieto en su celda. En un registro de desplazamiento, además de guardarse, el dato se puede <strong>mover</strong> (desplazar) etapa por etapa. Memoria <em>con movimiento</em>.</p>
+      </div>
+    </div>
+
+    <h3>Capacidad de almacenamiento</h3>
+    <p>Es simplemente el <strong>número de flip-flops</strong>, porque cada uno guarda 1 bit.</p>
+    <div class="formula">n flip-flops &nbsp;=&nbsp; <b>n bits</b> &nbsp;&nbsp;→&nbsp;&nbsp; 2 bytes = 2 × 8 = <b>16 bits</b> (16 flip-flops)</div>
+
+    <h3>Cómo se ve por dentro (4 etapas)</h3>
+    <div class="card">
+      <p class="small" style="margin-top:0">La entrada serie mete un bit por la izquierda; con cada pulso, cada flip-flop copia lo que tiene su vecino. Q<sub>3</sub> es la salida serie.</p>
+      <div class="reg" style="justify-content:center;gap:10px">
+        <span class="arrow-in">Entrada →</span>
+        <div class="bit sm on">D</div>
+        <span style="color:var(--muted)">→</span>
+        <div class="bit sm">Q0</div>
+        <span style="color:var(--muted)">→</span>
+        <div class="bit sm">Q1</div>
+        <span style="color:var(--muted)">→</span>
+        <div class="bit sm">Q2</div>
+        <span style="color:var(--muted)">→</span>
+        <div class="bit sm on">Q3</div>
+        <span class="arrow-out">→ Salida</span>
+      </div>
+      <p class="small center mb0" style="margin-top:12px">Todos comparten el <strong>mismo reloj</strong> (CLK). Por eso el desplazamiento es <strong>síncrono</strong>: todos se mueven en el mismo instante.</p>
+    </div>
+  </section>
+
+  <!-- ============ 2 · LOS 4 TIPOS ============ -->
+  <section id="tipos">
+    <div class="sec-head"><span class="sec-num">2</span><h2>Los 4 tipos (por cómo entran y salen los datos)</h2></div>
+    <p class="sec-sub">Resumen de 10 s: combina cómo <strong>entra</strong> el dato (serie/paralelo) con cómo <strong>sale</strong> (serie/paralelo). Da 4 combinaciones.</p>
+
+    <div class="callout key">
+      <span class="ic">🔤</span>
+      <div class="body">
+        <strong>Cómo leer las siglas (nunca las olvidas)</strong>
+        <p class="mb0"><strong>S</strong> = <em>Serial</em> = uno por uno. &nbsp;<strong>P</strong> = <em>Parallel</em> = todos de golpe. La <strong>primera</strong> letra es cómo <u>entra</u>, y la <strong>salida</strong> es la parte final. Ej: <code>SIPO</code> = <strong>S</strong>erial <strong>I</strong>n, <strong>P</strong>arallel <strong>O</strong>ut = entra en serie, sale en paralelo.</p>
+      </div>
+    </div>
+
+    <div class="grid cols-2">
+      <div class="card">
+        <p class="mini-title" style="color:var(--accent-ink)">SISO · Serie–Serie</p>
+        <p>Entra bit por bit, sale bit por bit.</p>
+        <p class="small mb0"><strong>Para qué:</strong> retardar una señal en el tiempo (línea de retardo).</p>
+      </div>
+      <div class="card">
+        <p class="mini-title" style="color:var(--teal)">SIPO · Serie–Paralelo</p>
+        <p>Entra bit por bit, y cuando ya está lleno, se leen todos los bits <strong>a la vez</strong>.</p>
+        <p class="small mb0"><strong>Para qué:</strong> convertir <strong>serie → paralelo</strong> (recibir datos de un cable y entregarlos a un bus).</p>
+      </div>
+      <div class="card">
+        <p class="mini-title" style="color:var(--teal)">PISO · Paralelo–Serie</p>
+        <p>Se cargan todos los bits de golpe y salen <strong>uno por uno</strong>.</p>
+        <p class="small mb0"><strong>Para qué:</strong> convertir <strong>paralelo → serie</strong> (mandar un byte por un solo cable).</p>
+      </div>
+      <div class="card">
+        <p class="mini-title" style="color:var(--accent-ink)">PIPO · Paralelo–Paralelo</p>
+        <p>Entran todos de golpe y salen todos de golpe.</p>
+        <p class="small mb0"><strong>Para qué:</strong> memoria/buffer temporal muy rápido (retención de datos).</p>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <span class="ic">🔁</span>
+      <div class="body">
+        <strong>Bonus: bidireccional</strong>
+        <p class="mb0">Algunos registros pueden desplazar a la <strong>izquierda o a la derecha</strong> según una entrada de control (por ejemplo <code>RIGHT/LEFT</code>). Útil para operaciones aritméticas (desplazar = multiplicar/dividir por 2).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3 · SERIE VS PARALELO ============ -->
+  <section id="serie-paralelo">
+    <div class="sec-head"><span class="sec-num">3</span><h2>Serie vs Paralelo — la distinción que más cae</h2></div>
+    <p class="sec-sub">Resumen de 10 s: <strong>serie</strong> = 1 cable, 1 bit por pulso, lento pero barato. <strong>Paralelo</strong> = muchos cables, todo a la vez, rapidísimo.</p>
+
+    <div class="table-wrap">
+      <table class="tbl">
+        <thead>
+          <tr><th></th><th>En SERIE</th><th>En PARALELO</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>Cables de datos</strong></td><td>1 solo</td><td>n (uno por bit)</td></tr>
+          <tr><td><strong>Bits por pulso</strong></td><td>1 bit</td><td>n bits (todos)</td></tr>
+          <tr><td><strong>Pulsos para n bits</strong></td><td class="mono"><strong>n pulsos</strong></td><td class="mono"><strong>1 pulso</strong></td></tr>
+          <tr><td><strong>Velocidad</strong></td><td>Lento</td><td>Rápido (límite = retardo de propagación de <strong>1</strong> flip-flop)</td></tr>
+          <tr><td><strong>Ventaja</strong></td><td>Pocos cables → barato y simple</td><td>Muy rápido</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout watch">
+      <span class="ic">⚠️</span>
+      <div class="body">
+        <strong>El error clásico del examen</strong>
+        <p class="mb0">"¿Cuántos pulsos para meter un byte?" — Si es <strong>serie</strong>, son <strong>8 pulsos</strong> (uno por bit, sin importar cuántos 1s o 0s tenga). Si es <strong>paralelo síncrono</strong>, es <strong>1 pulso</strong>. Nunca dependa de la cantidad de unos que haya en el dato.</p>
+      </div>
+    </div>
+
+    <div class="callout key">
+      <span class="ic">🎯</span>
+      <div class="body">
+        <strong>Por qué el paralelo "no depende de la frecuencia"</strong>
+        <p class="mb0">Como los n bits entran <strong>al mismo tiempo</strong> con un solo flanco, el tiempo real no lo pone el reloj sino lo que tarda <strong>un</strong> flip-flop en cambiar de estado (su <em>retardo de propagación</em>). Por eso la respuesta a "8 bits en paralelo" es "el retardo de un flip-flop", no una cuenta con la frecuencia.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4 · SIMULADOR ============ -->
+  <section id="simulador">
+    <div class="sec-head"><span class="sec-num">4</span><h2>Simulador: velo con tus propios ojos</h2></div>
+    <p class="sec-sub">Resumen de 10 s: mete bits, dale a <strong>Pulso</strong> y observa cómo todo se corre una posición a la derecha. La mejor forma de que se te grabe.</p>
+
+    <div class="sim" id="sim">
+      <div class="sim-row">
+        <span class="sim-label">Registro (8 bits)</span>
+        <div class="reg" id="simReg" aria-live="polite"><!-- bits generados por JS --></div>
+      </div>
+
+      <div class="sim-row">
+        <span class="sim-label">Próximo bit a entrar</span>
+        <div class="toggle" id="simInBit" role="group" aria-label="Bit de entrada">
+          <button data-bit="0">0</button>
+          <button data-bit="1" class="active">1</button>
+        </div>
+        <span class="readout">entra por la <b>izquierda</b> →</span>
+      </div>
+
+      <div class="sim-row">
+        <button class="btn primary" id="simPulse">▶ Pulso de reloj</button>
+        <button class="btn" id="simAuto">⏩ Auto ×8</button>
+        <button class="btn ghost" id="simClear">Borrar (todo 0)</button>
+        <button class="btn ghost" id="simRand">🎲 Aleatorio</button>
+      </div>
+
+      <hr class="divider">
+      <div class="sim-row">
+        <span class="readout">Pulsos: <span class="pill-count" id="simCount">0</span></span>
+        <span class="readout">Último bit que <b>salió</b> por la derecha: <span class="pill-count" id="simOut">—</span></span>
+      </div>
+      <p class="small mb0" id="simHint">💡 Tip: pon un solo <code>1</code> y dale a "Pulso" varias veces. Vas a ver ese 1 caminar hasta salir por la derecha en 8 pulsos — ese es el <strong>retardo</strong> del registro.</p>
+    </div>
+  </section>
+
+  <!-- ============ 5 · TIEMPOS ============ -->
+  <section id="tiempo">
+    <div class="sec-head"><span class="sec-num">5</span><h2>Cálculos de tiempo y frecuencia</h2></div>
+    <p class="sec-sub">Resumen de 10 s: casi todo sale de <code>T = 1/f</code> y de "n bits en serie tardan n·T". Aquí están las 3 fórmulas y ejemplos resueltos.</p>
+
+    <div class="grid cols-3">
+      <div class="card center">
+        <p class="mini-title">Periodo y frecuencia</p>
+        <div class="formula mb0" style="font-size:16px"><b>T = 1 / f</b></div>
+      </div>
+      <div class="card center">
+        <p class="mini-title">Meter n bits en serie</p>
+        <div class="formula mb0" style="font-size:16px">t = <b>n × T</b> = n / f</div>
+      </div>
+      <div class="card center">
+        <p class="mini-title">Retardo de un SISO</p>
+        <div class="formula mb0" style="font-size:16px">t<sub>d</sub> = <b>n × T</b></div>
+      </div>
+    </div>
+
+    <div class="callout tip">
+      <span class="ic">📐</span>
+      <div class="body">
+        <strong>Recordatorio de unidades</strong>
+        <p class="mb0"><code>1 kHz = 10³ Hz</code>, <code>1 MHz = 10⁶ Hz</code>. Y <code>1 µs = 10⁻⁶ s</code>. Un truco: si <code>f</code> está en <strong>MHz</strong>, entonces <code>T</code> sale directo en <strong>µs</strong> (porque 1/MHz = µs). Ej: f = 2 MHz → T = 0.5 µs.</p>
+      </div>
+    </div>
+
+    <h3>Ejemplo A — meter 8 bits en serie (pregunta 5 del examen)</h3>
+    <div class="card">
+      <p><strong>Dato:</strong> f = 100 kHz, 8 bits en serie. &nbsp;<strong>Pide:</strong> ¿en cuánto tiempo entran?</p>
+      <p style="margin-bottom:6px">1) Periodo: <code>T = 1/f = 1/100 000 Hz = 10 µs</code></p>
+      <p style="margin-bottom:6px">2) Son 8 pulsos (uno por bit): <code>t = 8 × 10 µs</code></p>
+      <p class="mb0"><strong>Resultado:</strong> <span class="hl">t = 80 µs</span></p>
+    </div>
+
+    <h3>Ejemplo B — obtener un retardo (pregunta 9 del examen)</h3>
+    <div class="card">
+      <p><strong>Dato:</strong> registro SISO de 8 bits, quieres un retardo de 24 µs. <strong>Pide:</strong> ¿qué frecuencia de reloj?</p>
+      <p style="margin-bottom:6px">1) Retardo = n · T → <code>24 µs = 8 × T</code></p>
+      <p style="margin-bottom:6px">2) Despeja: <code>T = 24/8 = 3 µs</code></p>
+      <p class="mb0">3) Frecuencia: <code>f = 1/T = 1/3 µs ≈ </code> <span class="hl">333 kHz</span></p>
+    </div>
+
+    <h3>Calculadora rápida</h3>
+    <div class="sim">
+      <div class="sim-row">
+        <span class="sim-label">n (bits)</span>
+        <input id="cN" type="number" value="8" min="1" style="width:90px;padding:8px 10px;border-radius:9px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-family:var(--mono);font-size:15px">
+        <span class="sim-label">Frecuencia</span>
+        <input id="cF" type="number" value="100" min="0" step="any" style="width:110px;padding:8px 10px;border-radius:9px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-family:var(--mono);font-size:15px">
+        <select id="cU" style="padding:8px 10px;border-radius:9px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:15px">
+          <option value="1e3">kHz</option>
+          <option value="1e6">MHz</option>
+          <option value="1">Hz</option>
+        </select>
+      </div>
+      <div class="sim-row" style="gap:22px">
+        <span class="readout">Periodo <b>T</b> = <span id="cOutT" class="pill-count">—</span></span>
+        <span class="readout">Meter n bits en <b>serie</b> = <span id="cOutSerie" class="pill-count">—</span></span>
+        <span class="readout">Meter n bits en <b>paralelo</b> = <span id="cOutPar" class="pill-count">1 pulso</span></span>
+      </div>
+      <p class="small mb0">El tiempo en serie es <code>n × T</code>; en paralelo, un solo pulso (o el retardo de un flip-flop).</p>
+    </div>
+  </section>
+
+  <!-- ============ 6 · CONTADORES ============ -->
+  <section id="contadores">
+    <div class="sec-head"><span class="sec-num">6</span><h2>Contadores de desplazamiento: Anillo y Johnson</h2></div>
+    <p class="sec-sub">Resumen de 10 s: si realimentas la salida del registro a su entrada, en vez de perder datos, <strong>cuentas</strong> en una secuencia que se repite.</p>
+
+    <div class="grid cols-2">
+      <div class="card">
+        <p class="mini-title" style="color:var(--accent-ink)">Contador en ANILLO (ring)</p>
+        <p>La última salida se realimenta a la entrada <strong>tal cual</strong> (sin invertir). Circula un solo <code>1</code> (o un solo 0) dando vueltas.</p>
+        <div class="formula" style="font-size:16px">módulo = <b>n</b> &nbsp;(n = # de flip-flops)</div>
+        <ul class="check">
+          <li>Para contar hasta 10 → <strong>10 flip-flops</strong></li>
+          <li>Se "autodecodifica": cada estado tiene un solo 1 (one-hot), no necesitas compuertas extra para saber en qué cuenta vas</li>
+          <li>Desperdicia flip-flops (usa muchos para pocos estados)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <p class="mini-title" style="color:var(--teal)">Contador JOHNSON (twisted ring)</p>
+        <p>La última salida se realimenta <strong>invertida</strong> (<span class="mono">Q̄</span>). El registro se va <strong>llenando de 1s</strong> y luego <strong>vaciando</strong>.</p>
+        <div class="formula" style="font-size:16px">módulo = <b>2n</b> &nbsp;(con n flip-flops)</div>
+        <ul class="check">
+          <li>Para contar hasta 10 → <strong>5 flip-flops</strong> (porque 2 × 5 = 10)</li>
+          <li>Aprovecha mejor: el doble de estados con los mismos flip-flops</li>
+          <li>Sí necesita algo de decodificación (2 entradas por estado)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout key">
+      <span class="ic">🧷</span>
+      <div class="body">
+        <strong>Cómo no confundirlos nunca</strong>
+        <p class="mb0"><strong>Johnson</strong> = "el que rinde el <span class="hl">doble</span>" = <strong>2n</strong> (la J me recuerda el truco de invertir/torcer la realimentación). <strong>Anillo</strong> = un anillo simple, <strong>n</strong> posiciones = <strong>n</strong>. Si te pierdes: Johnson necesita <em>menos</em> flip-flops para el mismo módulo.</p>
+      </div>
+    </div>
+
+    <h3>Míralo moverse</h3>
+    <div class="sim">
+      <div class="sim-row">
+        <div class="toggle" id="cntType" role="group" aria-label="Tipo de contador">
+          <button data-type="ring" class="active">Anillo</button>
+          <button data-type="johnson">Johnson</button>
+        </div>
+        <button class="btn primary" id="cntStep">▶ Pulso</button>
+        <button class="btn" id="cntRun">⏯ Correr / Parar</button>
+        <button class="btn ghost" id="cntReset">↺ Reiniciar</button>
+      </div>
+      <div class="sim-row">
+        <span class="sim-label">Estado (4 FF)</span>
+        <div class="reg" id="cntReg"></div>
+      </div>
+      <div class="sim-row">
+        <span class="readout">Estado #<span class="pill-count" id="cntState">0</span> de <span id="cntMod">4</span></span>
+        <span class="readout" id="cntDesc"></span>
+      </div>
+      <p class="small mb0" id="cntNote">Con 4 flip-flops: el <strong>anillo</strong> tiene 4 estados; el <strong>Johnson</strong> tiene 8. Cambia el tipo y compáralos.</p>
+    </div>
+  </section>
+
+  <!-- ============ 7 · APLICACIONES ============ -->
+  <section id="aplicaciones">
+    <div class="sec-head"><span class="sec-num">7</span><h2>Aplicaciones (para dónde sirven)</h2></div>
+    <p class="sec-sub">Resumen de 10 s: retardar señales, convertir serie↔paralelo (comunicaciones), y escanear teclados.</p>
+
+    <div class="grid cols-3">
+      <div class="card">
+        <p class="mini-title">⏱️ Retardo de tiempo</p>
+        <p class="mb0">Un SISO de n etapas retrasa la señal <code>n × T</code>. Metes un dato y sale n pulsos después.</p>
+      </div>
+      <div class="card">
+        <p class="mini-title">🔄 Conversión serie↔paralelo</p>
+        <p class="mb0">SIPO y PISO son el corazón de la comunicación serie (UART): un byte viaja por un cable y se rearma en paralelo del otro lado.</p>
+      </div>
+      <div class="card">
+        <p class="mini-title">⌨️ Escaneo de teclado</p>
+        <p class="mb0">Un contador en anillo recorre las filas del teclado una por una para detectar qué tecla se pulsó.</p>
+      </div>
+    </div>
+
+    <div class="callout key">
+      <span class="ic">⌨️</span>
+      <div class="body">
+        <strong>El codificador de teclado (pregunta 10)</strong>
+        <p>El <strong>contador en anillo</strong> va "barriendo" las filas: aplica un nivel a cada fila <strong>de manera secuencial</strong>, una a la vez. Cuando pulsas una tecla, ese nivel de la fila activa se acopla a su columna, y el circuito detecta <em>qué</em> tecla fue (fila × columna). Ese barrido secuencial es justo el propósito del anillo.</p>
+        <p class="mb0"><span class="hl">Ojo con tu figura:</span> el circuito estándar de Floyd (Fig. 9.38) aplica un nivel <strong>ALTO</strong> a cada fila → respuesta <strong>(a)</strong>. Si tu edición dibuja el barrido activo-<strong>bajo</strong>, sería la (c). El concepto es el mismo: barrido secuencial fila por fila.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 8 · CUESTIONARIO ============ -->
+  <section id="cuestionario">
+    <div class="sec-head"><span class="sec-num">8</span><h2>Cuestionario resuelto (opción múltiple)</h2></div>
+    <p class="sec-sub">Las 10 preguntas del cuestionario. <strong>Intenta responder tú primero</strong> (toca la opción) — se marca correcta/incorrecta y aparece el porqué. Practicar así, con recuerdo activo, es lo que hace que se fije.</p>
+
+    <div class="callout tip">
+      <span class="ic">🖱️</span>
+      <div class="body"><p class="mb0"><strong>Modo estudio:</strong> toca la opción que creas correcta. Verde = bien, rojo = ojo. Vuelve a intentar cuando quieras.</p></div>
+    </div>
+
+    <div id="quiz">
+      <div class="q" data-q="1">
+        <div class="q-head"><span class="q-tag">1</span><span class="q-text">Una etapa de un registro de desplazamiento está formada por:</span></div>
+        <ul class="q-opts">
+          <li><span class="lt">a</span> un latch</li>
+          <li data-correct="true"><span class="lt">b</span> un flip-flop</li>
+          <li><span class="lt">c</span> un byte de almacenamiento</li>
+          <li><span class="lt">d</span> cuatro bits de almacenamiento</li>
+        </ul>
+        <div class="q-explain"><b>Respuesta: (b) un flip-flop.</b> Cada etapa guarda exactamente 1 bit, y el dispositivo que guarda 1 bit de forma estable y sincronizada con el reloj es el flip-flop.</div>
+      </div>
+
+      <div class="q" data-q="2">
+        <div class="q-head"><span class="q-tag">2</span><span class="q-text">Para desplazar en serie un byte de datos en un registro, es necesario:</span></div>
+        <ul class="q-opts">
+          <li><span class="lt">a</span> un impulso de reloj</li>
+          <li><span class="lt">b</span> un impulso de carga</li>
+          <li data-correct="true"><span class="lt">c</span> ocho impulsos de reloj</li>
+          <li><span class="lt">d</span> un impulso de reloj por cada 1 del dato</li>
+        </ul>
+        <div class="q-explain"><b>Respuesta: (c) ocho impulsos.</b> Un byte = 8 bits. En serie entra 1 bit por flanco de reloj, así que necesitas 8 pulsos — sin importar cuántos 1s o 0s tenga el dato.</div>
+      </div>
+
+      <div class="q" data-q="3">
+        <div class="q-head"><span class="q-tag">3</span><span class="q-text">Para cargar en paralelo un byte con carga síncrona, es necesario:</span></div>
+        <ul class="q-opts">
+          <li data-correct="true"><span class="lt">a</span> un impulso de reloj</li>
+          <li><span class="lt">b</span> un impulso por cada 1 del dato</li>
+          <li><span class="lt">c</span> ocho impulsos de reloj</li>
+          <li><span class="lt">d</span> un impulso por cada 0 del dato</li>
+        </ul>
+        <div class="q-explain"><b>Respuesta: (a) un impulso.</b> En carga paralela todos los bits entran al mismo tiempo, así que basta un solo flanco de reloj para cargar el byte completo.</div>
+      </div>
+
+      <div class="q" data-q="4">
+        <div class="q-head"><span class="q-tag">4</span><span class="q-text">Se desplaza en serie 10110101 (primer bit el de más a la derecha) a un registro de 8 bits con estado inicial 11100100. Tras <strong>dos</strong> pulsos, el contenido es:</span></div>
+        <ul class="q-opts">
+          <li><span class="lt">a</span> 01011110</li>
+          <li><span class="lt">b</span> 10110101</li>
+          <li data-correct="true"><span class="lt">c</span> 01111001</li>
+          <li><span class="lt">d</span> 00101101</li>
+        </ul>
+        <div class="q-explain"><b>Respuesta: (c) 01111001.</b> El primer bit que entra es el de más a la derecha del dato: 1, luego 0. Desplazando a la derecha (el bit nuevo entra por la izquierda):<br>
+        Inicial: <code>11100100</code><br>
+        Pulso 1 (entra 1): <code>11110010</code><br>
+        Pulso 2 (entra 0): <code>01111001</code></div>
+      </div>
+
+      <div class="q" data-q="5">
+        <div class="q-head"><span class="q-tag">5</span><span class="q-text">Con reloj de 100 kHz, ocho bits se introducen en serie en:</span></div>
+        <ul class="q-opts">
+          <li data-correct="true"><span class="lt">a</span> 80 µs</li>
+          <li><span class="lt">b</span> 8 µs</li>
+          <li><span class="lt">c</span> 80 ms</li>
+          <li><span class="lt">d</span> 10 µs</li>
+        </ul>
+        <div class="q-explain"><b>Respuesta: (a) 80 µs.</b> T = 1/100 kHz = 10 µs. En serie son 8 pulsos → 8 × 10 µs = 80 µs.</div>
+      </div>
+
+      <div class="q" data-q="6">
+        <div class="q-head"><span class="q-tag">6</span><span class="q-text">Con reloj de 1 MHz, ocho bits se introducen en <strong>paralelo</strong> en:</span></div>
+        <ul class="q-opts">
+          <li><span class="lt">a</span> 8 µs</li>
+          <li><span class="lt">b</span> el retardo de propagación de ocho flip-flops</li>
+          <li><span class="lt">c</span> 1 µs</li>
+          <li data-correct="true"><span class="lt">d</span> el retardo de propagación de <strong>un</strong> flip-flop</li>
+        </ul>
+        <div class="q-explain"><b>Respuesta: (d).</b> En paralelo los 8 bits se cargan al mismo tiempo con un solo flanco, así que el tiempo real lo pone el retardo de <strong>un</strong> flip-flop, no la frecuencia del reloj. Por eso (a) y (c) son trampas.</div>
+      </div>
+
+      <div class="q" data-q="7">
+        <div class="q-head"><span class="q-tag">7</span><span class="q-text">Un contador Johnson de módulo 10 requiere:</span></div>
+        <ul class="q-opts">
+          <li><span class="lt">a</span> diez flip-flops</li>
+          <li><span class="lt">b</span> cuatro flip-flops</li>
+          <li data-correct="true"><span class="lt">c</span> cinco flip-flops</li>
+          <li><span class="lt">d</span> doce flip-flops</li>
+        </ul>
+        <div class="q-explain"><b>Respuesta: (c) cinco.</b> En Johnson, módulo = 2n. Si 2n = 10, entonces n = 5 flip-flops.</div>
+      </div>
+
+      <div class="q" data-q="8">
+        <div class="q-head"><span class="q-tag">8</span><span class="q-text">Un contador en anillo de módulo 10 requiere como mínimo:</span></div>
+        <ul class="q-opts">
+          <li data-correct="true"><span class="lt">a</span> diez flip-flops</li>
+          <li><span class="lt">b</span> cinco flip-flops</li>
+          <li><span class="lt">c</span> cuatro flip-flops</li>
+          <li><span class="lt">d</span> doce flip-flops</li>
+        </ul>
+        <div class="q-explain"><b>Respuesta: (a) diez.</b> En el anillo, módulo = n. Para módulo 10 necesitas 10 flip-flops (un 1 circulando entre 10 posiciones).</div>
+      </div>
+
+      <div class="q" data-q="9">
+        <div class="q-head"><span class="q-tag">9</span><span class="q-text">Un registro SISO de 8 bits, para un retardo de 24 µs, necesita frecuencia de reloj:</span></div>
+        <ul class="q-opts">
+          <li><span class="lt">a</span> 41.67 kHz</li>
+          <li data-correct="true"><span class="lt">b</span> 333 kHz</li>
+          <li><span class="lt">c</span> 125 kHz</li>
+          <li><span class="lt">d</span> 8 MHz</li>
+        </ul>
+        <div class="q-explain"><b>Respuesta: (b) 333 kHz.</b> Retardo = n·T → 24 µs = 8·T → T = 3 µs → f = 1/3 µs ≈ 333 kHz.</div>
+      </div>
+
+      <div class="q" data-q="10">
+        <div class="q-head"><span class="q-tag">10</span><span class="q-text">El propósito del contador en anillo en el codificador de teclado (Fig. 9.38) es:</span></div>
+        <ul class="q-opts">
+          <li data-correct="true"><span class="lt">a</span> aplicar secuencialmente un nivel ALTO a cada fila para detectar la pulsación</li>
+          <li><span class="lt">b</span> proporcionar los impulsos de disparo del registro de código de tecla</li>
+          <li><span class="lt">c</span> aplicar secuencialmente un nivel BAJO a cada fila</li>
+          <li><span class="lt">d</span> invertir la polarización de los diodos de cada fila</li>
+        </ul>
+        <div class="q-explain"><b>Respuesta: (a).</b> El anillo barre las filas una por una aplicando un nivel a cada una; al pulsar una tecla ese nivel llega a la columna y se detecta. En el circuito estándar de Floyd el nivel es ALTO → (a). <span class="hl">Si tu figura usa barrido activo-bajo, sería (c)</span> — revisa la figura, el concepto es el mismo: barrido secuencial.</div>
+      </div>
+    </div>
+
+    <div class="sim-row" style="margin-top:16px">
+      <button class="btn" id="quizReveal">👁️ Mostrar todas las respuestas</button>
+      <button class="btn ghost" id="quizReset">↺ Reiniciar cuestionario</button>
+      <span class="readout">Aciertos: <span class="pill-count" id="quizScore">0 / 10</span></span>
+    </div>
+  </section>
+
+  <!-- ============ 9 · FUNCIONES BÁSICAS ============ -->
+  <section id="funciones">
+    <div class="sec-head"><span class="sec-num">9</span><h2>Preguntas de "funciones básicas"</h2></div>
+    <p class="sec-sub">Las dos preguntas de desarrollo del cuestionario, con la respuesta lista para escribir.</p>
+
+    <details class="acc" open>
+      <summary>1 · ¿Por qué se consideran los registros de desplazamiento dispositivos básicos de memoria?</summary>
+      <div class="acc-body">
+        <p class="mb0">Porque están construidos con <strong>flip-flops</strong>, y cada flip-flop <strong>retiene (memoriza)</strong> el bit que tiene almacenado mientras haya alimentación y no llegue un nuevo pulso de desplazamiento o de carga. Esa capacidad de <strong>guardar y conservar datos binarios</strong> es la característica esencial de una memoria. La diferencia frente a otras memorias es que aquí el dato, además de guardarse, se puede <strong>desplazar</strong> de una etapa a otra.</p>
+      </div>
+    </details>
+
+    <details class="acc" open>
+      <summary>2 · ¿Cuál es la capacidad de almacenamiento de un registro que puede contener dos bytes?</summary>
+      <div class="acc-body">
+        <p class="mb0"><strong>16 bits.</strong> Cada byte son 8 bits y cada bit necesita un flip-flop, así que 2 bytes = 2 × 8 = <strong>16 bits</strong> (16 flip-flops).</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ 10 · DIAGRAMAS DE TIEMPO ============ -->
+  <section id="problemas">
+    <div class="sec-head"><span class="sec-num">10</span><h2>Diagramas de tiempo: el método + problemas resueltos</h2></div>
+    <p class="sec-sub">Resumen de 10 s: en cada flanco activo, <strong>todo se corre una posición</strong>. Si dominas el método, resuelves cualquier variante que ponga la profe.</p>
+
+    <div class="callout key">
+      <span class="ic">🧭</span>
+      <div class="body">
+        <strong>El método universal (3 reglas)</strong>
+        <p style="margin:8px 0 4px"><strong>1.</strong> Marca los <strong>flancos activos</strong> del reloj (las líneas punteadas verticales). En cada uno pasa <em>todo</em> a la vez.</p>
+        <p style="margin:4px 0"><strong>2.</strong> En cada flanco: el <strong>bit de entrada entra</strong> por un extremo, todo se <strong>corre una posición</strong>, y el bit del otro extremo <strong>sale/se pierde</strong>.</p>
+        <p class="mb0"><strong>3.</strong> Para un SISO de n etapas: la <strong>salida = entrada retrasada n pulsos</strong>. Si arranca borrado (en 0), la salida es 0 hasta el pulso n+1.</p>
+      </div>
+    </div>
+
+    <div class="callout watch">
+      <span class="ic">🔎</span>
+      <div class="body">
+        <strong>Aviso honesto sobre estos diagramas</strong>
+        <p class="mb0">Las secuencias de bits de <em>entrada</em> se leyeron de tus figuras escaneadas haciendo zoom. El <strong>método y los cálculos son correctos</strong>, pero justo sobre un flanco puede colarse ±1 bit de error de lectura. <span class="hl">Compara la fila "Entrada" con tu figura</span>: si una celda no cuadra, solo corrige ese bit y la salida se recorre igual (el patrón se desplaza n lugares).</p>
+      </div>
+    </div>
+
+    <div class="legend">
+      <span><span class="sw" style="background:#2563eb"></span>Entrada de datos serie</span>
+      <span><span class="sw" style="background:#16a34a"></span>Salida de datos</span>
+      <span>Líneas punteadas = flancos activos de reloj</span>
+    </div>
+
+    <!-- P5 -->
+    <h3>Problema 5 — Estado del registro tras cada pulso (Fig. 9.49, SRG 12)</h3>
+    <p><strong>Método:</strong> los datos entran por la izquierda (D) y salen por la derecha → desplazamiento a la <strong>derecha</strong>. En cada flanco: el bit de entrada entra por la izquierda, todo se corre una posición, y el bit de la extrema derecha se pierde.</p>
+    <p class="small">Entrada serie leída en la figura (8 pulsos): <code>1 1 1 0 0 0 1 1</code> · Estado inicial: <code>1010 0111 1000</code></p>
+    <div class="table-wrap">
+      <table class="tbl">
+        <thead><tr><th>Pulso</th><th class="mono">Entra</th><th class="mono">Estado del registro (12 bits)</th></tr></thead>
+        <tbody>
+          <tr><td>—</td><td class="mono">—</td><td class="mono">1010 0111 1000</td></tr>
+          <tr><td>1</td><td class="mono">1</td><td class="mono">1101 0011 1100</td></tr>
+          <tr><td>2</td><td class="mono">1</td><td class="mono">1110 1001 1110</td></tr>
+          <tr><td>3</td><td class="mono">1</td><td class="mono">1111 0100 1111</td></tr>
+          <tr><td>4</td><td class="mono">0</td><td class="mono">0111 1010 0111</td></tr>
+          <tr><td>5</td><td class="mono">0</td><td class="mono">0011 1101 0011</td></tr>
+          <tr><td>6</td><td class="mono">0</td><td class="mono">0001 1110 1001</td></tr>
+          <tr><td>7</td><td class="mono">1</td><td class="mono">1000 1111 0100</td></tr>
+          <tr><td>8</td><td class="mono">1</td><td class="mono">1100 0111 1010</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small">Fíjate cómo cada fila es la anterior "empujada" un lugar a la derecha, con el bit nuevo entrando por la izquierda.</p>
+
+    <!-- P6 -->
+    <h3>Problema 6 — Salida serie (Fig. 9.50, SRG 10, borrado)</h3>
+    <p><strong>Clave:</strong> en un SISO la salida es la entrada <strong>retrasada 10 pulsos</strong> (10 etapas). Arrancando en ceros, la salida es 0 durante los primeros 10 pulsos; en el pulso 11 empieza a salir el bit que entró en el pulso 1.</p>
+    <div class="diagram"><div class="scroll">
+<svg viewBox="0 0 838 270" width="838" height="270" xmlns="http://www.w3.org/2000/svg" font-family="ui-monospace,Menlo,Consolas,monospace"><text x="0" y="22" font-size="15" font-weight="700" fill="currentColor" font-family="system-ui,sans-serif">Problema 6 — SRG 10, borrado (SISO)</text><text x="141" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">1</text><text x="187" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">2</text><text x="233" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">3</text><text x="279" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">4</text><text x="325" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">5</text><text x="371" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">6</text><text x="417" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">7</text><text x="463" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">8</text><text x="509" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">9</text><text x="555" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">10</text><text x="601" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">11</text><text x="647" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">12</text><text x="693" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">13</text><text x="739" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">14</text><text x="785" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">15</text><line x1="118" y1="38" x2="118" y2="224" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="164" y1="38" x2="164" y2="224" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="210" y1="38" x2="210" y2="224" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="256" y1="38" x2="256" y2="224" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="302" y1="38" x2="302" y2="224" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="348" y1="38" x2="348" y2="224" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="394" y1="38" x2="394" y2="224" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="440" y1="38" x2="440" y2="224" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="486" y1="38" x2="486" y2="224" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="532" y1="38" x2="532" y2="224" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="578" y1="38" x2="578" y2="224" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="624" y1="38" x2="624" y2="224" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="670" y1="38" x2="670" y2="224" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="716" y1="38" x2="716" y2="224" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="762" y1="38" x2="762" y2="224" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="808" y1="38" x2="808" y2="224" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><text x="0" y="84" font-size="12" fill="currentColor" font-weight="600" font-family="system-ui,sans-serif">CLK</text><path d="M 118 82 L 118 52 L 138.7 52 L 138.7 82 L 164 82 L 164 52 L 184.7 52 L 184.7 82 L 210 82 L 210 52 L 230.7 52 L 230.7 82 L 256 82 L 256 52 L 276.7 52 L 276.7 82 L 302 82 L 302 52 L 322.7 52 L 322.7 82 L 348 82 L 348 52 L 368.7 52 L 368.7 82 L 394 82 L 394 52 L 414.7 52 L 414.7 82 L 440 82 L 440 52 L 460.7 52 L 460.7 82 L 486 82 L 486 52 L 506.7 52 L 506.7 82 L 532 82 L 532 52 L 552.7 52 L 552.7 82 L 578 82 L 578 52 L 598.7 52 L 598.7 82 L 624 82 L 624 52 L 644.7 52 L 644.7 82 L 670 82 L 670 52 L 690.7 52 L 690.7 82 L 716 82 L 716 52 L 736.7 52 L 736.7 82 L 762 82 L 762 52 L 782.7 52 L 782.7 82 L 808 82" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><text x="0" y="146" font-size="12" fill="currentColor" font-weight="600" font-family="system-ui,sans-serif">Entrada</text><path d="M 118 144 L 164 144 L 164 114 L 210 114 L 256 114 L 302 114 L 302 144 L 348 144 L 394 144 L 394 114 L 440 114 L 440 144 L 486 144 L 532 144 L 532 114 L 578 114 L 624 114 L 624 144 L 670 144 L 670 114 L 716 114 L 762 114 L 762 144 L 808 144" fill="none" stroke="#2563eb" stroke-width="2.4" stroke-linejoin="round"/><text x="141" y="158" font-size="12" text-anchor="middle" font-weight="700" fill="#2563eb">0</text><text x="187" y="106" font-size="12" text-anchor="middle" font-weight="700" fill="#2563eb">1</text><text x="233" y="106" font-size="12" text-anchor="middle" font-weight="700" fill="#2563eb">1</text><text x="279" y="106" font-size="12" text-anchor="middle" font-weight="700" fill="#2563eb">1</text><text x="325" y="158" font-size="12" text-anchor="middle" font-weight="700" fill="#2563eb">0</text><text x="371" y="158" font-size="12" text-anchor="middle" font-weight="700" fill="#2563eb">0</text><text x="417" y="106" font-size="12" text-anchor="middle" font-weight="700" fill="#2563eb">1</text><text x="463" y="158" font-size="12" text-anchor="middle" font-weight="700" fill="#2563eb">0</text><text x="509" y="158" font-size="12" text-anchor="middle" font-weight="700" fill="#2563eb">0</text><text x="555" y="106" font-size="12" text-anchor="middle" font-weight="700" fill="#2563eb">1</text><text x="601" y="106" font-size="12" text-anchor="middle" font-weight="700" fill="#2563eb">1</text><text x="647" y="158" font-size="12" text-anchor="middle" font-weight="700" fill="#2563eb">0</text><text x="693" y="106" font-size="12" text-anchor="middle" font-weight="700" fill="#2563eb">1</text><text x="739" y="106" font-size="12" text-anchor="middle" font-weight="700" fill="#2563eb">1</text><text x="785" y="158" font-size="12" text-anchor="middle" font-weight="700" fill="#2563eb">0</text><text x="0" y="208" font-size="12" fill="currentColor" font-weight="600" font-family="system-ui,sans-serif">Salida</text><path d="M 118 206 L 164 206 L 210 206 L 256 206 L 302 206 L 348 206 L 394 206 L 440 206 L 486 206 L 532 206 L 578 206 L 624 206 L 624 176 L 670 176 L 716 176 L 762 176 L 762 206 L 808 206" fill="none" stroke="#16a34a" stroke-width="2.4" stroke-linejoin="round"/><text x="141" y="220" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">0</text><text x="187" y="220" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">0</text><text x="233" y="220" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">0</text><text x="279" y="220" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">0</text><text x="325" y="220" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">0</text><text x="371" y="220" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">0</text><text x="417" y="220" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">0</text><text x="463" y="220" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">0</text><text x="509" y="220" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">0</text><text x="555" y="220" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">0</text><text x="601" y="220" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">0</text><text x="647" y="168" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">1</text><text x="693" y="168" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">1</text><text x="739" y="168" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">1</text><text x="785" y="220" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">0</text><text x="0" y="256" font-size="11.5" fill="currentColor" opacity="0.7" font-family="system-ui,sans-serif">Salida = entrada retrasada 10 pulsos. Pulsos 1–10: salen los 0 iniciales. En el pulso 12 aparece el bit de entrada nº 2.</text></svg>
+    </div>
+      <p class="note">Con 15 pulsos solo alcanzan a salir los primeros 5 bits de entrada (0 1 1 1 0), que aparecen 10 relojes después → el "111" de la salida cae en los relojes 12-13-14.</p>
+    </div>
+
+    <!-- P7 -->
+    <h3>Problema 7 — Igual, pero con la Fig. 9.51 (SRG 10, borrado)</h3>
+    <div class="diagram"><div class="scroll">
+<svg viewBox="0 0 746 270" width="746" height="270" xmlns="http://www.w3.org/2000/svg" font-family="ui-monospace,Menlo,Consolas,monospace"><text x="0" y="22" font-size="15" font-weight="700" fill="currentColor" font-family="system-ui,sans-serif">Problema 7 — SRG 10, borrado (SISO)</text><text x="141" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">1</text><text x="187" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">2</text><text x="233" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">3</text><text x="279" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">4</text><text x="325" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">5</text><text x="371" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">6</text><text x="417" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">7</text><text x="463" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">8</text><text x="509" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">9</text><text x="555" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">10</text><text x="601" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">11</text><text x="647" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">12</text><text x="693" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">13</text><line x1="118" y1="38" x2="118" y2="224" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="164" y1="38" x2="164" y2="224" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="210" y1="38" x2="210" y2="224" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="256" y1="38" x2="256" y2="224" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="302" y1="38" x2="302" y2="224" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="348" y1="38" x2="348" y2="224" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="394" y1="38" x2="394" y2="224" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="440" y1="38" x2="440" y2="224" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="486" y1="38" x2="486" y2="224" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="532" y1="38" x2="532" y2="224" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="578" y1="38" x2="578" y2="224" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="624" y1="38" x2="624" y2="224" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="670" y1="38" x2="670" y2="224" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="716" y1="38" x2="716" y2="224" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><text x="0" y="84" font-size="12" fill="currentColor" font-weight="600" font-family="system-ui,sans-serif">CLK</text><path d="M 118 82 L 118 52 L 138.7 52 L 138.7 82 L 164 82 L 164 52 L 184.7 52 L 184.7 82 L 210 82 L 210 52 L 230.7 52 L 230.7 82 L 256 82 L 256 52 L 276.7 52 L 276.7 82 L 302 82 L 302 52 L 322.7 52 L 322.7 82 L 348 82 L 348 52 L 368.7 52 L 368.7 82 L 394 82 L 394 52 L 414.7 52 L 414.7 82 L 440 82 L 440 52 L 460.7 52 L 460.7 82 L 486 82 L 486 52 L 506.7 52 L 506.7 82 L 532 82 L 532 52 L 552.7 52 L 552.7 82 L 578 82 L 578 52 L 598.7 52 L 598.7 82 L 624 82 L 624 52 L 644.7 52 L 644.7 82 L 670 82 L 670 52 L 690.7 52 L 690.7 82 L 716 82" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><text x="0" y="146" font-size="12" fill="currentColor" font-weight="600" font-family="system-ui,sans-serif">Entrada</text><path d="M 118 114 L 164 114 L 210 114 L 210 144 L 256 144 L 302 144 L 302 114 L 348 114 L 394 114 L 440 114 L 440 144 L 486 144 L 532 144 L 532 114 L 578 114 L 624 114 L 624 144 L 670 144 L 716 144" fill="none" stroke="#2563eb" stroke-width="2.4" stroke-linejoin="round"/><text x="141" y="106" font-size="12" text-anchor="middle" font-weight="700" fill="#2563eb">1</text><text x="187" y="106" font-size="12" text-anchor="middle" font-weight="700" fill="#2563eb">1</text><text x="233" y="158" font-size="12" text-anchor="middle" font-weight="700" fill="#2563eb">0</text><text x="279" y="158" font-size="12" text-anchor="middle" font-weight="700" fill="#2563eb">0</text><text x="325" y="106" font-size="12" text-anchor="middle" font-weight="700" fill="#2563eb">1</text><text x="371" y="106" font-size="12" text-anchor="middle" font-weight="700" fill="#2563eb">1</text><text x="417" y="106" font-size="12" text-anchor="middle" font-weight="700" fill="#2563eb">1</text><text x="463" y="158" font-size="12" text-anchor="middle" font-weight="700" fill="#2563eb">0</text><text x="509" y="158" font-size="12" text-anchor="middle" font-weight="700" fill="#2563eb">0</text><text x="555" y="106" font-size="12" text-anchor="middle" font-weight="700" fill="#2563eb">1</text><text x="601" y="106" font-size="12" text-anchor="middle" font-weight="700" fill="#2563eb">1</text><text x="647" y="158" font-size="12" text-anchor="middle" font-weight="700" fill="#2563eb">0</text><text x="693" y="158" font-size="12" text-anchor="middle" font-weight="700" fill="#2563eb">0</text><text x="0" y="208" font-size="12" fill="currentColor" font-weight="600" font-family="system-ui,sans-serif">Salida</text><path d="M 118 206 L 164 206 L 210 206 L 256 206 L 302 206 L 348 206 L 394 206 L 440 206 L 486 206 L 532 206 L 578 206 L 578 176 L 624 176 L 670 176 L 670 206 L 716 206" fill="none" stroke="#16a34a" stroke-width="2.4" stroke-linejoin="round"/><text x="141" y="220" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">0</text><text x="187" y="220" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">0</text><text x="233" y="220" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">0</text><text x="279" y="220" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">0</text><text x="325" y="220" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">0</text><text x="371" y="220" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">0</text><text x="417" y="220" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">0</text><text x="463" y="220" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">0</text><text x="509" y="220" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">0</text><text x="555" y="220" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">0</text><text x="601" y="168" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">1</text><text x="647" y="168" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">1</text><text x="693" y="220" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">0</text><text x="0" y="256" font-size="11.5" fill="currentColor" opacity="0.7" font-family="system-ui,sans-serif">Mismo principio: 13 pulsos. La salida sigue en 0 hasta el pulso 11, donde emerge el bit de entrada nº 1.</text></svg>
+    </div>
+      <p class="note">Con 13 pulsos emergen los 3 primeros bits de entrada (1 1 0): salida alta en los relojes 11 y 12, baja en el 13.</p>
+    </div>
+
+    <!-- P8 -->
+    <h3>Problema 8 — ¿Qué número está almacenado? (Fig. 9.52, 8 bits)</h3>
+    <p><strong>Método:</strong> los 8 bits de la forma de onda "Salida de datos" forman el número. Como <strong>el primer bit que sale (el de más a la izquierda) es el LSB</strong>, hay que <strong>invertir el orden</strong> para escribir el número normal (MSB a la izquierda).</p>
+    <div class="diagram"><div class="scroll">
+<svg viewBox="0 0 516 208" width="516" height="208" xmlns="http://www.w3.org/2000/svg" font-family="ui-monospace,Menlo,Consolas,monospace"><text x="0" y="22" font-size="15" font-weight="700" fill="currentColor" font-family="system-ui,sans-serif">Problema 8 — Lectura del número (8 bits)</text><text x="141" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">1</text><text x="187" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">2</text><text x="233" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">3</text><text x="279" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">4</text><text x="325" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">5</text><text x="371" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">6</text><text x="417" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">7</text><text x="463" y="32" font-size="10" text-anchor="middle" fill="currentColor" opacity="0.55">8</text><line x1="118" y1="38" x2="118" y2="162" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="164" y1="38" x2="164" y2="162" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="210" y1="38" x2="210" y2="162" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="256" y1="38" x2="256" y2="162" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="302" y1="38" x2="302" y2="162" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="348" y1="38" x2="348" y2="162" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="394" y1="38" x2="394" y2="162" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="440" y1="38" x2="440" y2="162" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><line x1="486" y1="38" x2="486" y2="162" stroke="currentColor" stroke-opacity="0.12" stroke-dasharray="3 4"/><text x="0" y="84" font-size="12" fill="currentColor" font-weight="600" font-family="system-ui,sans-serif">CLK</text><path d="M 118 82 L 118 52 L 138.7 52 L 138.7 82 L 164 82 L 164 52 L 184.7 52 L 184.7 82 L 210 82 L 210 52 L 230.7 52 L 230.7 82 L 256 82 L 256 52 L 276.7 52 L 276.7 82 L 302 82 L 302 52 L 322.7 52 L 322.7 82 L 348 82 L 348 52 L 368.7 52 L 368.7 82 L 394 82 L 394 52 L 414.7 52 L 414.7 82 L 440 82 L 440 52 L 460.7 52 L 460.7 82 L 486 82" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/><text x="0" y="146" font-size="12" fill="currentColor" font-weight="600" font-family="system-ui,sans-serif">Salida</text><path d="M 118 144 L 164 144 L 164 114 L 210 114 L 210 144 L 256 144 L 256 114 L 302 114 L 348 114 L 348 144 L 394 144 L 394 114 L 440 114 L 486 114" fill="none" stroke="#16a34a" stroke-width="2.4" stroke-linejoin="round"/><text x="141" y="158" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">0</text><text x="187" y="106" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">1</text><text x="233" y="158" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">0</text><text x="279" y="106" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">1</text><text x="325" y="106" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">1</text><text x="371" y="158" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">0</text><text x="417" y="106" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">1</text><text x="463" y="106" font-size="12" text-anchor="middle" font-weight="700" fill="#16a34a">1</text><text x="0" y="194" font-size="11.5" fill="currentColor" opacity="0.7" font-family="system-ui,sans-serif">Primer bit que sale (izquierda) = LSB. Se lee 01011011 (LSB→MSB); al reordenar da 11011010.</text></svg>
+    </div></div>
+
+    <div class="card">
+      <p class="mini-title">Reconstrucción del número</p>
+      <div class="table-wrap">
+        <table class="tbl">
+          <tr><th>Orden de salida</th><td class="mono">1º</td><td class="mono">2º</td><td class="mono">3º</td><td class="mono">4º</td><td class="mono">5º</td><td class="mono">6º</td><td class="mono">7º</td><td class="mono">8º</td></tr>
+          <tr><th>Bit leído</th><td class="mono">0</td><td class="mono">1</td><td class="mono">0</td><td class="mono">1</td><td class="mono">1</td><td class="mono">0</td><td class="mono">1</td><td class="mono">1</td></tr>
+          <tr><th>Peso</th><td class="mono">2⁰</td><td class="mono">2¹</td><td class="mono">2²</td><td class="mono">2³</td><td class="mono">2⁴</td><td class="mono">2⁵</td><td class="mono">2⁶</td><td class="mono">2⁷</td></tr>
+          <tr><th>Valor</th><td class="mono">0</td><td class="mono">2</td><td class="mono">0</td><td class="mono">8</td><td class="mono">16</td><td class="mono">0</td><td class="mono">64</td><td class="mono">128</td></tr>
+        </table>
+      </div>
+      <p class="mb0" style="margin-top:12px">Suma = 2 + 8 + 16 + 64 + 128 = <strong style="font-size:18px">218</strong> → binario (MSB a la izquierda) <code>1101 1010</code> = <code>0xDA</code> = <strong>218</strong></p>
+    </div>
+
+    <h3>Cómo atacar los demás (3, 4, 9, 10, 11, 12)</h3>
+    <div class="grid cols-2">
+      <details class="acc"><summary>Problemas 3 y 4 — estados de cada FF (Fig. 9.3, arranca en todo 1s)</summary><div class="acc-body"><p class="mb0">Mismo método de desplazamiento, pero <strong>parte de 1111...</strong> en vez de ceros. Haz una tabla: una fila por pulso, una columna por flip-flop (Q0, Q1, …). En cada flanco copia hacia la derecha y mete el bit de entrada que marca la Fig. 9.47 (P3) o 9.48 (P4) por la izquierda. Dibuja las salidas Q como ondas usando esa tabla.</p></div></details>
+      <details class="acc"><summary>Problemas 9 y 10 — salidas paralelo (SIPO, Fig. 9.8)</summary><div class="acc-body"><p class="mb0">Es un SIPO borrado. Dibuja <strong>una onda por cada salida</strong> Q0…Qn. Q0 sigue a la entrada con 1 pulso de retraso, Q1 va 1 pulso detrás de Q0, y así. Cada salida es la entrada retrasada tantos pulsos como su posición. Usa las ondas de la Fig. 9.50 (P9) o 9.51 (P10).</p></div></details>
+      <details class="acc"><summary>Problema 11 — 74HC164 con CLR (Fig. 9.53)</summary><div class="acc-body"><p class="mb0">El 74HC164 es un SIPO de 8 bits. La entrada serie es <code>A·B</code> (AND de las dos entradas). <span class="hl">Cuidado con CLR</span>: cuando <span class="mono">CLR</span> = 0 (activo-bajo) <strong>borra todo a 0</strong> sin importar el reloj. Desplaza normal cuando CLR = 1. Cada Q es la entrada retrasada su número de posición.</p></div></details>
+      <details class="acc"><summary>Problema 12 — PISO con SHIFT/LOAD (Fig. 9.54)</summary><div class="acc-body"><p class="mb0">Con <span class="mono">SHIFT/LOAD</span> = 0 → <strong>carga</strong> en paralelo D0 D1 D2 D3 = 1 0 1 0. Con SHIFT/LOAD = 1 → <strong>desplaza</strong> y va sacando esos bits por la salida serie, uno por pulso, mientras entra SER = 0 por el otro lado. Dibuja la salida siguiendo el orden en que salen los bits cargados.</p></div></details>
+    </div>
+  </section>
+
+  <!-- ============ 11 · CHULETA ============ -->
+  <section id="chuleta">
+    <div class="sec-head"><span class="sec-num">✂</span><h2>Chuleta final (repaso de 3 minutos)</h2></div>
+    <p class="sec-sub">Léela justo antes de entrar. Si te sabes esto, tienes el 8 asegurado.</p>
+
+    <div class="card cheat">
+      <div class="grid cols-2">
+        <div class="card">
+          <p class="mini-title">Conceptos</p>
+          <ul class="clean" style="margin-bottom:0">
+            <li>1 etapa = 1 flip-flop = 1 bit</li>
+            <li>n flip-flops = n bits (2 bytes = 16 bits)</li>
+            <li>Es memoria porque los FF retienen el dato</li>
+            <li>Desplazar = mover 1 posición por flanco de reloj</li>
+          </ul>
+        </div>
+        <div class="card">
+          <p class="mini-title">Serie vs paralelo</p>
+          <ul class="clean" style="margin-bottom:0">
+            <li>Serie: 1 bit/pulso → <strong>n pulsos</strong>, pocos cables</li>
+            <li>Paralelo: todo a la vez → <strong>1 pulso</strong>, n cables</li>
+            <li>Paralelo real = retardo de <strong>1</strong> FF (no depende de f)</li>
+          </ul>
+        </div>
+        <div class="card">
+          <p class="mini-title">Fórmulas</p>
+          <ul class="clean" style="margin-bottom:0">
+            <li><code>T = 1/f</code></li>
+            <li>Serie: <code>t = n·T = n/f</code></li>
+            <li>Retardo SISO: <code>t = n·T</code></li>
+            <li>MHz ↔ µs (recíprocos directos)</li>
+          </ul>
+        </div>
+        <div class="card">
+          <p class="mini-title">Contadores</p>
+          <ul class="clean" style="margin-bottom:0">
+            <li>Anillo: módulo = <strong>n</strong> (mód 10 → 10 FF)</li>
+            <li>Johnson: módulo = <strong>2n</strong> (mód 10 → 5 FF)</li>
+            <li>Anillo se autodecodifica (one-hot)</li>
+            <li>Johnson rinde el doble de estados</li>
+          </ul>
+        </div>
+        <div class="card">
+          <p class="mini-title">Diagramas de tiempo</p>
+          <ul class="clean" style="margin-bottom:0">
+            <li>En cada flanco: todo se corre 1 lugar</li>
+            <li>SISO: salida = entrada retrasada n pulsos</li>
+            <li>Borrado → salida 0 hasta el pulso n+1</li>
+          </ul>
+        </div>
+        <div class="card">
+          <p class="mini-title">Trampas típicas</p>
+          <ul class="clean" style="margin-bottom:0">
+            <li>Serie NO depende de cuántos 1s tenga el dato</li>
+            <li>Paralelo NO se calcula con la frecuencia</li>
+            <li>LSB primero → invierte el orden al escribir</li>
+            <li>CLR activo-bajo borra sin importar el reloj</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout good">
+      <span class="ic">🍀</span>
+      <div class="body">
+        <strong>Última cosa antes del examen</strong>
+        <p class="mb0">Respira. Si una pregunta te traba, salta y vuelve. Los diagramas de tiempo se resuelven despacio, celda por celda — no de memoria. <strong>Tú puedes con esto.</strong> Mucho éxito a ti y a tu equipo. 🚀</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p style="margin-bottom:6px"><strong>Guía de estudio · Registros de desplazamiento</strong> — Diseño de Sistemas Digitales (DSD), Sexto Semestre.</p>
+    <p class="mb0">Basada en el cuestionario del Cap. 9 de Floyd, <em>Fundamentos de Sistemas Digitales</em>. Hecha para entender y compartir. Verifica siempre las lecturas de figuras contra tu libro.</p>
+  </div>
+</footer>
+
+<script src="js/app.js?v=1"></script>
+</body>
+</html>
